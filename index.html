@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SongGlow | 把英文歌变成可学会的课程</title>
+  <meta name="description" content="SongGlow 是一个把英文歌曲拆成同步字幕、逐句精讲和复习闭环的网站原型。">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#">
+        <span class="brand-mark">S</span>
+        <span class="brand-text">SongGlow</span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="切换导航">菜单</button>
+      <nav class="nav" id="site-nav">
+        <a href="#player">学习体验</a>
+        <a href="#experience">学习路径</a>
+        <a href="#discover">发现歌曲</a>
+        <a href="#system">内容体系</a>
+        <a href="#pricing">会员方案</a>
+        <a href="./admin.html">后台管理</a>
+      </nav>
+      <a class="ghost-button" href="./admin.html">进入后台</a>
+    </header>
+
+    <main>
+      <section class="hero hero-site">
+        <div class="hero-copy">
+          <div class="eyebrow">English learning through music</div>
+          <h1>把每一首英文歌，变成一节真正学得会的课</h1>
+          <p>
+            SongGlow 不是普通歌词站，也不是简单播放器。它把歌曲播放、逐句字幕、英语精讲、复习练习和个人积累放进同一条学习链，让“喜欢听”自然变成“真正学会”。
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#player">先看学习页</a>
+            <a class="secondary-button" href="./songglow-product-plan/songglow-product-plan.html">查看产品方案</a>
+          </div>
+          <div class="hero-stats">
+            <article>
+              <strong>单曲学习</strong>
+              <span>一首歌就是一节完整微课</span>
+            </article>
+            <article>
+              <strong>逐句精讲</strong>
+              <span>歌词、词组、语法、背景同步展开</span>
+            </article>
+            <article>
+              <strong>复习闭环</strong>
+              <span>收藏、填词、跟读、回顾持续发生</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="hero-panel hero-stage">
+          <div class="stage-window">
+            <div class="stage-topline">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="stage-card stage-primary">
+              <div class="mini-label">今日推荐</div>
+              <h3>从喜欢的歌开始学英语</h3>
+              <p>先听，再点开任意一句，把不懂的地方变成看得懂、记得住、用得出的表达。</p>
+            </div>
+            <div class="stage-grid">
+              <div class="stage-card">
+                <div class="card-kicker">Now learning</div>
+                <strong>Imagine</strong>
+                <span>同步字幕 + 逐句精讲 + 收藏表达</span>
+              </div>
+              <div class="stage-card">
+                <div class="card-kicker">This week</div>
+                <strong>12 个表达</strong>
+                <span>来自 3 首歌，已进入复习清单</span>
+              </div>
+              <div class="stage-card">
+                <div class="card-kicker">Best for</div>
+                <strong>入门用户</strong>
+                <span>歌词清晰、句子短、情绪容易理解</span>
+              </div>
+              <div class="stage-card">
+                <div class="card-kicker">Learning mode</div>
+                <strong>边听边学</strong>
+                <span>点击歌词即可查看释义、词组和背景</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="value-strip">
+        <div class="value-item">
+          <span class="value-title">先有音乐，再有学习</span>
+          <p>入口天然轻，不需要先说服用户去“上课”。</p>
+        </div>
+        <div class="value-item">
+          <span class="value-title">播放器就是课堂</span>
+          <p>听、看、点、学、练全在同一页完成，不打断节奏。</p>
+        </div>
+        <div class="value-item">
+          <span class="value-title">每首歌都能复习</span>
+          <p>学过的歌词和表达会沉淀成可重复使用的个人资产。</p>
+        </div>
+      </section>
+
+      <section class="player-showcase hero-player" id="player">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Core learning experience</div>
+            <h2>播放页就是学习页</h2>
+          </div>
+          <div class="player-status">
+            <span class="status-dot"></span>
+            桌面与移动端都已适配
+          </div>
+        </div>
+
+        <div class="player-layout">
+          <aside class="player-left panel">
+            <div class="record-visual">
+              <div class="record-disc"></div>
+              <div class="record-center"></div>
+            </div>
+            <div class="track-meta">
+              <span class="tag">当前歌曲</span>
+              <h3 id="track-title">Imagine</h3>
+              <p id="track-artist">John Lennon · 中级 · 抒情经典</p>
+            </div>
+            <div class="track-brief">
+              <div>
+                <span class="brief-label">适合练什么</span>
+                <p id="track-focus">理解抽象表达、入门连读、意群感知</p>
+              </div>
+              <div>
+                <span class="brief-label">学习收益</span>
+                <p id="track-goal">学完后能理解这首歌的核心主题，并记住 6 到 8 个高频表达。</p>
+              </div>
+            </div>
+            <div class="song-tag-list" id="song-tag-list"></div>
+            <div class="control-row">
+              <button class="round-button" id="play-toggle" aria-label="播放或暂停">▶</button>
+              <button class="soft-button">0.8x</button>
+              <button class="soft-button">AB 复读</button>
+              <button class="soft-button">加入复习</button>
+            </div>
+            <audio id="audio-player" preload="metadata"></audio>
+            <div class="audio-status" id="audio-status">当前为演示歌曲。上传你自己的音频后，这里会直接播放真实文件。</div>
+            <div class="progress-card">
+              <div class="progress-head">
+                <span>学习进度</span>
+                <strong id="progress-text">01 / 04</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+              <small>当前句切换时，右侧精讲和下方练习建议也会同步变化。</small>
+            </div>
+          </aside>
+
+          <section class="player-center panel">
+            <div class="panel-title">
+              <h3>同步字幕</h3>
+              <p>点任意一句，立刻看到释义、知识点和背景</p>
+            </div>
+            <div class="lyrics-list" id="lyrics-list">
+              <button class="lyric-line active" data-line="0">
+                <span class="lyric-en">Imagine there's no heaven</span>
+                <span class="lyric-cn">想象没有天堂</span>
+              </button>
+              <button class="lyric-line" data-line="1">
+                <span class="lyric-en">It's easy if you try</span>
+                <span class="lyric-cn">如果你愿意去想，这并不难</span>
+              </button>
+              <button class="lyric-line" data-line="2">
+                <span class="lyric-en">No hell below us</span>
+                <span class="lyric-cn">我们脚下没有地狱</span>
+              </button>
+              <button class="lyric-line" data-line="3">
+                <span class="lyric-en">Above us, only sky</span>
+                <span class="lyric-cn">在我们上方，只有天空</span>
+              </button>
+            </div>
+            <div class="line-context">
+              <div class="mini-label">这句为什么值得学</div>
+              <p id="line-context-text">这首歌的语言非常简单，但它把抽象主题写得非常容易进入，是非常适合入门用户的学习材料。</p>
+            </div>
+          </section>
+
+          <aside class="player-right panel">
+            <div class="panel-title">
+              <h3>逐句精讲</h3>
+              <p>解释句意，再拆开词汇、词组、语法和背景</p>
+            </div>
+            <div class="explain-card">
+              <span class="tag soft">当前句释义</span>
+              <h4 id="explain-title">Imagine there's no heaven</h4>
+              <p id="explain-summary">这里的 imagine 不是单纯“想象一下”，而是带有邀请听者一起进入设想世界的语气。</p>
+            </div>
+            <div class="knowledge-list">
+              <article>
+                <span>关键词</span>
+                <p id="explain-vocab">imagine：设想，脑海中构建一个场景。</p>
+              </article>
+              <article>
+                <span>表达方式</span>
+                <p id="explain-phrase">there is / there are 结构被转化成一种带画面感的设定句式。</p>
+              </article>
+              <article>
+                <span>背景理解</span>
+                <p id="explain-background">歌曲以极简句子提出理想世界观，语言简单却很有思想张力。</p>
+              </article>
+            </div>
+            <div class="exercise-card">
+              <div class="mini-label">学完立刻练</div>
+              <ul id="exercise-list">
+                <li>遮住 heaven，尝试听写这一句</li>
+                <li>跟读两遍，注意 imagine 的轻重音</li>
+                <li>把 only sky 改写成你自己的表达</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section-block" id="experience">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Learning flow</div>
+            <h2>从听到学，再到记住</h2>
+          </div>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-card">
+            <span class="flow-step">01</span>
+            <h3>选一首想学的歌</h3>
+            <p>从主题、难度、歌手或学习目标出发，快速找到适合自己的歌曲。</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">02</span>
+            <h3>播放时同步看懂歌词</h3>
+            <p>当前句高亮显示，用户能明确知道自己正在听哪一句、学哪一句。</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">03</span>
+            <h3>点开任意一句精讲</h3>
+            <p>用词汇、词组、语法和背景，把一句歌词讲透，而不是只给直译。</p>
+          </article>
+          <article class="flow-card">
+            <span class="flow-step">04</span>
+            <h3>把重点内容加入复习</h3>
+            <p>生词、表达和句子被自动沉淀，下一次可以继续练填词和跟读。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block" id="discover">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Discover songs</div>
+            <h2>按主题、难度和学习目标找歌</h2>
+          </div>
+          <div class="filter-pills">
+            <button class="pill active">全部</button>
+            <button class="pill">入门</button>
+            <button class="pill">抒情</button>
+            <button class="pill">流行</button>
+            <button class="pill">口语感</button>
+          </div>
+        </div>
+
+        <div class="song-grid" id="song-grid">
+          <article class="song-card selected" data-song="imagine">
+            <div class="song-gradient imagine"></div>
+            <div class="song-info">
+              <span class="tag">推荐入门</span>
+              <h3>Imagine</h3>
+              <p>适合练抽象表达、短句理解和意群节奏。</p>
+            </div>
+          </article>
+          <article class="song-card" data-song="yellow">
+            <div class="song-gradient yellow"></div>
+            <div class="song-info">
+              <span class="tag">温柔抒情</span>
+              <h3>Yellow</h3>
+              <p>适合学习自然告白表达、比喻和情绪语气。</p>
+            </div>
+          </article>
+          <article class="song-card" data-song="counting">
+            <div class="song-gradient counting"></div>
+            <div class="song-info">
+              <span class="tag">节奏流行</span>
+              <h3>Counting Stars</h3>
+              <p>适合听辨弱读、固定搭配和副歌节奏。</p>
+            </div>
+          </article>
+          <a class="song-card song-card-upload" href="./admin.html">
+            <div class="song-upload-body">
+              <span class="tag">后台上传</span>
+              <h3>上传你自己的音乐文件</h3>
+              <p>在后台上传音频、封面和歌词时间轴，前台会自动读取曲库并展示播放。</p>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section class="section-block" id="system">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Content system</div>
+            <h2>让一首歌具备“课程感”的内容结构</h2>
+          </div>
+        </div>
+
+        <div class="knowledge-grid system-grid">
+          <article class="feature-card">
+            <h3>句意释义</h3>
+            <p>先说这句到底什么意思，再解释语言细节，让用户不会先被术语劝退。</p>
+          </article>
+          <article class="feature-card">
+            <h3>词汇与词组</h3>
+            <p>把高频词和固定搭配抽出来，形成可复用、可收藏的表达资产。</p>
+          </article>
+          <article class="feature-card">
+            <h3>语法与发音</h3>
+            <p>只解释真正值得学的结构和连读点，不堆砌教材式概念。</p>
+          </article>
+          <article class="feature-card">
+            <h3>背景与语境</h3>
+            <p>补充歌手、创作故事和文化情绪，帮助用户真正理解歌词为什么这样写。</p>
+          </article>
+        </div>
+
+        <div class="content-workflow">
+          <div class="workflow-text">
+            <div class="eyebrow">Production workflow</div>
+            <h3>内容后台不是附属模块，而是产品资产中心</h3>
+            <p>每首歌上线前都会经过选歌、切句、时间轴校对、逐句精讲、复习题配置和质检。这样前台看到的不是散乱文本，而是一套可搜索、可推荐、可复习的结构化课程内容。</p>
+          </div>
+          <div class="workflow-list">
+            <div class="workflow-item">
+              <strong>选歌</strong>
+              <span>优先选择适合教学的歌曲，而不是只看热度。</span>
+            </div>
+            <div class="workflow-item">
+              <strong>切句</strong>
+              <span>按意群和节奏切分，保证字幕高亮和点击逻辑准确。</span>
+            </div>
+            <div class="workflow-item">
+              <strong>精讲</strong>
+              <span>固定拆成释义、表达、语法、背景四到五层。</span>
+            </div>
+            <div class="workflow-item">
+              <strong>复习</strong>
+              <span>自动沉淀成填词、跟读和卡片素材，形成长期留存。</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block personas-block">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">People we serve</div>
+            <h2>不同用户，进入同一条学习链</h2>
+          </div>
+        </div>
+        <div class="persona-tabs">
+          <button class="persona-tab active" data-persona="student">学生用户</button>
+          <button class="persona-tab" data-persona="worker">轻学习成人</button>
+          <button class="persona-tab" data-persona="speaker">口语提升用户</button>
+        </div>
+        <div class="persona-panel" id="persona-content">
+          <h3>学生用户</h3>
+          <p>他们对英文歌天然有兴趣，但通常缺少稳定的方法把“喜欢”变成“学会”。SongGlow 通过歌曲和学习的连接，降低开始门槛，让背单词、理解歌词和练听力发生在同一个场景里。</p>
+          <ul>
+            <li>更愿意从熟悉歌曲开始，而不是从教材开始</li>
+            <li>需要明确告诉他“这首歌适合练什么”</li>
+            <li>完成一首歌后的成就感，比做一页题更强</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="review-section" id="review">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Review and retention</div>
+            <h2>学过的内容，会变成可以反复使用的积累</h2>
+          </div>
+        </div>
+
+        <div class="review-layout">
+          <article class="review-card">
+            <h3>填词练习</h3>
+            <p>保留旋律和节奏，把关键词遮住，让用户在原歌语境里完成听写。</p>
+          </article>
+          <article class="review-card highlight">
+            <h3>跟读模仿</h3>
+            <p>逐句复读和原句对照配合使用，帮助用户建立更自然的语音节奏。</p>
+          </article>
+          <article class="review-card">
+            <h3>生词与表达卡片</h3>
+            <p>每首歌的重点表达会自动沉淀进个人卡片库，方便后续回顾和复用。</p>
+          </article>
+        </div>
+
+        <div class="dashboard-strip">
+          <div class="dashboard-card">
+            <span class="dashboard-label">本周学习</span>
+            <strong>3 首歌</strong>
+            <p>完成率 78%，其中 2 首进入复习队列。</p>
+          </div>
+          <div class="dashboard-card">
+            <span class="dashboard-label">新增表达</span>
+            <strong>12 个</strong>
+            <p>来自抽象主题和口语节奏表达，已可再次练习。</p>
+          </div>
+          <div class="dashboard-card">
+            <span class="dashboard-label">下次建议</span>
+            <strong>继续 Yellow</strong>
+            <p>适合把情绪表达和告白句型再往前学一层。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block pricing-block" id="pricing">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Pricing</div>
+            <h2>先免费感受，再为深度学习付费</h2>
+          </div>
+        </div>
+        <div class="pricing-grid">
+          <article class="pricing-card">
+            <span class="plan-name">Free</span>
+            <h3>免费体验</h3>
+            <p>适合第一次进入 SongGlow 的用户，先感受同步字幕和基础精讲。</p>
+            <ul>
+              <li>公开精选歌曲试听</li>
+              <li>基础同步字幕</li>
+              <li>部分精讲可查看</li>
+            </ul>
+            <a class="secondary-button" href="#player">开始试听</a>
+          </article>
+          <article class="pricing-card featured">
+            <span class="plan-name">Plus</span>
+            <h3>会员学习</h3>
+            <p>适合会持续学习英文歌的用户，完整解锁课程、复习和成长记录。</p>
+            <ul>
+              <li>完整歌曲课程库</li>
+              <li>全部逐句精讲</li>
+              <li>填词、复读、跟读</li>
+              <li>学习记录与个人表达库</li>
+            </ul>
+            <a class="primary-button" href="#player">解锁完整体验</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-block faq-block">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">FAQ</div>
+            <h2>关于这个网站的几个关键问题</h2>
+          </div>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>它和普通歌词翻译网站有什么区别？</summary>
+            <p>SongGlow 的目标不是给一句歌词配中文，而是把一首歌拆成可学习、可收藏、可复习的课程结构。用户在播放页里就能完成理解、练习和积累。</p>
+          </details>
+          <details class="faq-item">
+            <summary>为什么把播放器放在最前面？</summary>
+            <p>因为学习入口来自音乐兴趣。先听到、看到、点开一句，再开始理解，用户更愿意继续留在这条链路里。</p>
+          </details>
+          <details class="faq-item">
+            <summary>第一版最重要的功能是什么？</summary>
+            <p>播放器学习页、逐句精讲、复习入口和内容后台。这几个模块决定产品是不是成立，优先级高于社区和花哨的附加功能。</p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>SongGlow</strong>
+        <p>把每一首英文歌，变成一节真正学得会的课。</p>
+      </div>
+      <div class="footer-links">
+        <a href="#player">学习体验</a>
+        <a href="#discover">发现歌曲</a>
+        <a href="#pricing">会员方案</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="./music-library.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

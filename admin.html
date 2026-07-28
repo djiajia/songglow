@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SongGlow 后台 | 曲库管理</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell admin-shell">
+    <header class="topbar admin-topbar">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">S</span>
+        <span class="brand-text">SongGlow Admin</span>
+      </a>
+      <nav class="nav admin-nav">
+        <a href="./index.html">返回前台</a>
+        <a href="#upload-form">上传歌曲</a>
+        <a href="#library-list">后台曲库</a>
+      </nav>
+      <a class="ghost-button" href="./index.html">查看前台</a>
+    </header>
+
+    <main>
+      <section class="hero admin-hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Music library management</div>
+          <h1>上传音乐文件，前台自动读取曲库播放</h1>
+          <p>
+            这是一个浏览器内置的后台原型。你可以上传音频文件、配置歌曲基础信息、补充歌词时间轴，前台首页会直接读取这里保存的曲库并展示播放。
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#upload-form">开始上传</a>
+            <a class="secondary-button" href="./index.html">去前台查看</a>
+          </div>
+        </div>
+        <div class="admin-summary">
+          <div class="summary-card">
+            <span class="dashboard-label">当前状态</span>
+            <strong id="library-count">0 首</strong>
+            <p>已保存到后台曲库</p>
+          </div>
+          <div class="summary-card">
+            <span class="dashboard-label">说明</span>
+            <strong>浏览器存储</strong>
+            <p>适合原型和本地演示，正式项目建议接对象存储与服务端数据库。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-block admin-section" id="upload-form">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Upload song</div>
+            <h2>上传歌曲到后台曲库</h2>
+          </div>
+        </div>
+
+        <form class="admin-form" id="song-form">
+          <div class="form-grid">
+            <label class="form-field">
+              <span>歌曲名称</span>
+              <input type="text" name="title" placeholder="例如：Imagine" required>
+            </label>
+            <label class="form-field">
+              <span>歌手</span>
+              <input type="text" name="artist" placeholder="例如：John Lennon" required>
+            </label>
+            <label class="form-field">
+              <span>难度</span>
+              <select name="difficulty">
+                <option>入门</option>
+                <option>初中级</option>
+                <option>中级</option>
+                <option>进阶</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>标签</span>
+              <input type="text" name="tags" placeholder="用逗号分隔，例如：抒情,入门,短句">
+            </label>
+          </div>
+
+          <div class="form-grid">
+            <label class="form-field">
+              <span>适合练什么</span>
+              <input type="text" name="focus" placeholder="例如：连读、情绪表达、弱读听辨">
+            </label>
+            <label class="form-field">
+              <span>学习收益</span>
+              <input type="text" name="goal" placeholder="例如：学完后理解副歌核心表达">
+            </label>
+          </div>
+
+          <label class="form-field">
+            <span>歌曲简介 / 学习背景</span>
+            <textarea name="context" rows="3" placeholder="描述这首歌为什么适合学习、适合什么用户。"></textarea>
+          </label>
+
+          <div class="form-grid upload-grid">
+            <label class="form-field">
+              <span>音频文件</span>
+              <input type="file" name="audio" accept="audio/*" required>
+            </label>
+            <label class="form-field">
+              <span>歌曲封面（可选）</span>
+              <input type="file" name="cover" accept="image/*">
+            </label>
+          </div>
+
+          <label class="form-field">
+            <span>歌词时间轴（可选）</span>
+            <textarea name="lyrics" rows="8" placeholder="每行格式：开始秒数|结束秒数|英文歌词|中文翻译&#10;例如：0.5|4.2|Imagine there's no heaven|想象没有天堂"></textarea>
+          </label>
+
+          <label class="form-field">
+            <span>练习建议（可选）</span>
+            <textarea name="exercises" rows="4" placeholder="每行一条，例如：&#10;跟读两遍副歌&#10;遮住关键词尝试听写"></textarea>
+          </label>
+
+          <div class="admin-form-footer">
+            <button type="submit" class="primary-button">保存到后台曲库</button>
+            <p class="admin-tip" id="save-status">上传后，前台首页会自动读取这里的歌曲。</p>
+          </div>
+        </form>
+      </section>
+
+      <section class="section-block admin-section" id="library-list">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">Library</div>
+            <h2>后台曲库</h2>
+          </div>
+        </div>
+        <div class="library-list" id="library-list-container">
+          <div class="empty-library">
+            <h3>还没有上传歌曲</h3>
+            <p>先上传一首你自己的音频文件，前台就会把它加入歌曲列表并支持播放。</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./music-library.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

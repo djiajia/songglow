@@ -1,0 +1,13 @@
+{
+  "name": "songglow-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @songglow/web",
+    "build": "npm run build -w @songglow/web",
+    "start": "npm run start -w @songglow/web",
+    "dev:web": "npm run dev -w @songglow/web"
+  }
+}
