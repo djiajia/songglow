@@ -17,7 +17,7 @@ export default function AdminPage() {
         </header>
         <section className="hero">
           <h1>还没有配置后台环境变量</h1>
-          <p>请先在 Vercel 项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`POSTGRES_URL` 和 `VERCEL_BLOB_READ_WRITE_TOKEN`。</p>
+          <p>请先在项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` 和 `SUPABASE_BUCKET`。</p>
         </section>
       </div>
     );

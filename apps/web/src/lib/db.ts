@@ -1,67 +1,76 @@
-import { sql } from "@vercel/postgres";
-import type { Song } from "@/types";
+import { getSupabaseAdmin } from "@/lib/supabase";
+import type { LyricLine, Song } from "@/types";
 
-let schemaReady = false;
+export type StoredSong = Song & {
+  audioStoragePath?: string;
+  coverStoragePath?: string;
+};
 
-export async function ensureSchema() {
-  if (schemaReady) return;
-
-  await sql`
-    CREATE TABLE IF NOT EXISTS songs (
-      id TEXT PRIMARY KEY,
-      title TEXT NOT NULL,
-      artist TEXT NOT NULL,
-      difficulty TEXT NOT NULL DEFAULT '未设置',
-      tags JSONB NOT NULL DEFAULT '[]'::jsonb,
-      focus TEXT NOT NULL DEFAULT '',
-      goal TEXT NOT NULL DEFAULT '',
-      context TEXT NOT NULL DEFAULT '',
-      audio_url TEXT NOT NULL,
-      cover_url TEXT NOT NULL DEFAULT '',
-      audio_blob_path TEXT NOT NULL DEFAULT '',
-      cover_blob_path TEXT NOT NULL DEFAULT '',
-      lyrics JSONB NOT NULL DEFAULT '[]'::jsonb,
-      created_at BIGINT NOT NULL,
-      updated_at BIGINT NOT NULL
-    );
-  `;
-
-  schemaReady = true;
+function mapTags(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => String(item)).filter(Boolean);
 }
 
-function rowToSong(row: Record<string, any>): Song & {
-  audioBlobPath?: string;
-  coverBlobPath?: string;
-} {
+function mapLyrics(value: unknown): LyricLine[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((row) => ({
+      start: Number((row as Record<string, unknown>)?.start ?? 0),
+      end: Number((row as Record<string, unknown>)?.end ?? 0),
+      en: String((row as Record<string, unknown>)?.en ?? ""),
+      zh: String((row as Record<string, unknown>)?.zh ?? "")
+    }))
+    .filter((row) => row.en || row.zh);
+}
+
+function rowToSong(row: Record<string, any>): StoredSong {
   return {
     id: row.id,
     title: row.title,
     artist: row.artist,
-    difficulty: row.difficulty,
-    tags: row.tags || [],
+    difficulty: row.difficulty || "未设置",
+    tags: mapTags(row.tags),
     focus: row.focus || "",
     goal: row.goal || "",
     context: row.context || "",
     audioUrl: row.audio_url,
     coverUrl: row.cover_url || "",
-    lyrics: row.lyrics || [],
+    lyrics: mapLyrics(row.lyrics),
     createdAt: Number(row.created_at || 0),
     updatedAt: Number(row.updated_at || 0),
-    audioBlobPath: row.audio_blob_path || "",
-    coverBlobPath: row.cover_blob_path || ""
+    audioStoragePath: row.audio_storage_path || "",
+    coverStoragePath: row.cover_storage_path || ""
   };
 }
 
+function throwIfError(scope: string, error: { message: string } | null) {
+  if (error) {
+    throw new Error(`${scope}: ${error.message}`);
+  }
+}
+
 export async function listSongs() {
-  await ensureSchema();
-  const result = await sql`SELECT * FROM songs ORDER BY updated_at DESC`;
-  return result.rows.map(rowToSong);
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("songs")
+    .select("*")
+    .order("updated_at", { ascending: false });
+
+  throwIfError("Failed to list songs", error);
+  return (data || []).map(rowToSong);
 }
 
 export async function getSong(id: string) {
-  await ensureSchema();
-  const result = await sql`SELECT * FROM songs WHERE id = ${id} LIMIT 1`;
-  return result.rows[0] ? rowToSong(result.rows[0]) : null;
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  throwIfError("Failed to get song", error);
+  return data ? rowToSong(data) : null;
 }
 
 export async function insertSong(song: {
@@ -75,43 +84,41 @@ export async function insertSong(song: {
   context: string;
   audioUrl: string;
   coverUrl: string;
-  audioBlobPath: string;
-  coverBlobPath: string;
-  lyrics: unknown[];
+  audioStoragePath: string;
+  coverStoragePath: string;
+  lyrics: LyricLine[];
   createdAt: number;
   updatedAt: number;
 }) {
-  await ensureSchema();
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from("songs").insert({
+    id: song.id,
+    title: song.title,
+    artist: song.artist,
+    difficulty: song.difficulty,
+    tags: song.tags,
+    focus: song.focus,
+    goal: song.goal,
+    context: song.context,
+    audio_url: song.audioUrl,
+    cover_url: song.coverUrl,
+    audio_storage_path: song.audioStoragePath,
+    cover_storage_path: song.coverStoragePath,
+    lyrics: song.lyrics,
+    created_at: song.createdAt,
+    updated_at: song.updatedAt
+  });
 
-  await sql`
-    INSERT INTO songs (
-      id, title, artist, difficulty, tags, focus, goal, context,
-      audio_url, cover_url, audio_blob_path, cover_blob_path, lyrics, created_at, updated_at
-    ) VALUES (
-      ${song.id},
-      ${song.title},
-      ${song.artist},
-      ${song.difficulty},
-      ${JSON.stringify(song.tags)}::jsonb,
-      ${song.focus},
-      ${song.goal},
-      ${song.context},
-      ${song.audioUrl},
-      ${song.coverUrl},
-      ${song.audioBlobPath},
-      ${song.coverBlobPath},
-      ${JSON.stringify(song.lyrics)}::jsonb,
-      ${song.createdAt},
-      ${song.updatedAt}
-    )
-  `;
+  throwIfError("Failed to insert song", error);
 }
 
 export async function removeSong(id: string) {
-  await ensureSchema();
   const song = await getSong(id);
   if (!song) return null;
-  await sql`DELETE FROM songs WHERE id = ${id}`;
+
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.from("songs").delete().eq("id", id);
+
+  throwIfError("Failed to remove song", error);
   return song;
 }
-
