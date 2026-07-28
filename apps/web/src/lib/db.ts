@@ -91,7 +91,7 @@ export async function insertSong(song: {
   updatedAt: number;
 }) {
   const supabase = getSupabaseAdmin();
-  const { error } = await supabase.from("songs").insert({
+  const payload = {
     id: song.id,
     title: song.title,
     artist: song.artist,
@@ -107,7 +107,9 @@ export async function insertSong(song: {
     lyrics: song.lyrics,
     created_at: song.createdAt,
     updated_at: song.updatedAt
-  });
+  };
+
+  const { error } = await (supabase.from("songs") as any).insert(payload);
 
   throwIfError("Failed to insert song", error);
 }
