@@ -1,4 +1,27 @@
-import Link from "next/link";
+aimport Link from "next/link";
+import { notFound } from "next/navigation";
+import { getSong } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+export default async function SongDetailPage({ params }: { params: { id: string } }) {
+  const song = await getSong(params.id);
+  if (!song) notFound();
+
+  return (
+    <main className="min-h-screen bg-gray-50">
+      <div className="max-w-2xl mx-auto py-12 px-4">
+        <h1 className="text-3xl font-bold mb-6">{song.title}</h1>
+        <div className="prose max-w-none">
+          {song.lyrics?.split("\n").map((line, i) => (
+            <p key={i} className="mb-2">{line}</p>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSong } from "@/lib/db";
 
