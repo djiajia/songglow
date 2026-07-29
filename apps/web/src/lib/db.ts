@@ -29,7 +29,15 @@ function mapLyrics(value: unknown): LyricLine[] {
       en: String((row as Record<string, unknown>)?.en ?? ""),
       zh: String((row as Record<string, unknown>)?.zh ?? "")
     }))
-    .filter((row) => row.en || row.zh);
+    .filter(
+      (row) =>
+        (row.en || row.zh) &&
+        Number.isFinite(row.start) &&
+        Number.isFinite(row.end) &&
+        row.end > row.start &&
+        !(row.en.trim() === "英文歌词" && row.zh.trim() === "中文翻译")
+    )
+    .sort((a, b) => a.start - b.start);
 }
 
 function rowToSong(row: Record<string, any>): StoredSong {
