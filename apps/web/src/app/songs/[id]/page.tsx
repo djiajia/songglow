@@ -5,49 +5,70 @@ import { headers } from "next/headers";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export default function SongDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  return async function SongDetailPageAsync() {
-    const { id } = await params;
-    const h = headers();
-    const host = h.get("host");
-    const proto = h.get("x-forwarded-proto") ?? "https";
-    const apiUrl = `${proto}://${host}/api/songs/${id}`;
-    const res = await fetch(apiUrl, { cache: "no-store" });
-    const data = await res.json();
+type SongPayload = {
+  id: string;
+  title: string;
+  artist: string;
+  audioUrl: string;
+  lyrics?: Array<{ start: number; end: number; en: string; zh: string }>;
+};
 
-    if (!data || !data.song) {
-      notFound();
-    }
+export default async function SongDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
 
-    const song = data.song;
-    const { title, artist, album, coverUrl, duration, lyricTimeList } = song;
+  const h = headers();
+  const host = h.get("host");
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const apiUrl = `${proto}://${host}/api/songs/${id}`;
 
-    return (
-      <div className="min-h-screen bg-black text-white">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex flex-col items-center">
-            <img src={coverUrl} alt={title} className="w-48 h-48 object-cover rounded-lg shadow-xl mb-6" />
-            <h1 className="text-3xl font-bold text-center mb-2">{title}</h1>
-            <p className="text-gray-400 text-center mb-6">{artist} · {album}</p>
-            <p className="text-gray-500 text-center mb-8">时长: {duration}</p>
-            {lyricTimeList && lyricTimeList.length > 0 ? (
-              <div className="w-full">
-                <h2 className="text-xl font-semibold mb-4">歌词时间轴</h2>
-                <div className="space-y-2">
-                  {lyricTimeList.map((item: any, idx: number) => (
-                    <div key={idx} className="flex gap-4 p-3 rounded hover:bg-white/5">
-                      <span className="font-mono text-green-400 w-20">{item.time}</span>
-                      <span className="flex-1">{item.text}</span>
+  const res = await fetch(apiUrl, { cache: "no-store" });
+  if (!res.ok) notFound();
+
+  const song = (await res.json()) as SongPayload;
+
+  return (
+    <div className="shell">
+      <header className="topbar">
+        <div className="brand">{song.title}</div>
+        <nav className="nav">
+          <Link href="/">返回曲库</Link>
+          <Link href="/admin">后台上传</Link>
+        </nav>
+        <a className="button" href={song.audioUrl} target="_blank" rel="noreferrer">
+          打开音频
+        </a>
+      </header>
+
+      <section className="hero">
+        <h1 style={{ fontSize: "clamp(30px, 4vw, 44px)" }}>
+          {song.title} <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {song.artist}</span>
+        </h1>
+      </section>
+
+      <div className="grid" style={{ gridTemplateColumns: "1fr", marginTop: 18 }}>
+        <div className="card">
+          <span className="tag">歌词</span>
+          <h3 style={{ marginTop: 10 }}>逐句时间轴</h3>
+          <p>当前版本展示上传的时间轴歌词（若未填写，则为空）。</p>
+          <div className="stack">
+            {song.lyrics?.length ? (
+              song.lyrics.map((line, idx) => (
+                <div key={idx} className="card" style={{ boxShadow: "none", borderColor: "var(--line)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                    <div style={{ fontWeight: 700, letterSpacing: "-0.01em" }}>{line.en}</div>
+                    <div style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", color: "var(--muted)", fontSize: 12 }}>
+                      {line.start}s–{line.end}s
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ color: "var(--muted)", marginTop: 6 }}>{line.zh}</div>
                 </div>
-              </div>
+              ))
             ) : (
-              <div className="text-gray-500 text-center py-12">暂无歌词时间轴...</div>
+              <div style={{ color: "var(--muted)" }}>暂无歌词时间轴…</div>
             )}
           </div>
         </div>
       </div>
-    );
-  };
-}
+    </div>
+  );
+                }
