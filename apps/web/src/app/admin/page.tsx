@@ -1,4 +1,4 @@
-import Link from "next/link";
+pimport Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
 import { AdminUploadForm } from "@/components/admin-upload-form";
