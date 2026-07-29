@@ -22,7 +22,61 @@ export default async function AdminPage() {
           <p>请先在项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` 和 `SUPABASE_BUCKET`。</p>
         </section>
       </div>
+    );import Link from "next/link";
+import { redirect } from "next/navigation";
+import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
+import { listSongs } from "@/lib/db";
+import { AdminDashboard } from "@/components/admin-dashboard";
+
+export const dynamic = "force-dynamic";
+
+export default async function AdminPage() {
+  if (!isAdminEnabled()) {
+    return (
+      <div className="shell">
+        <header className="topbar">
+          <div className="brand">SongGlow Admin</div>
+          <nav className="nav">
+            <Link href="/">返回曲库</Link>
+          </nav>
+        </header>
+        <section className="hero">
+          <h1>还没有配置后台环境变量</h1>
+          <p>请先在项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` 和 `SUPABASE_BUCKET`。</p>
+        </section>
+      </div>
     );
+  }
+
+  if (!isAdminAuthenticated()) {
+    redirect("/admin/login");
+  }
+
+  const songs = await listSongs().catch(() => []);
+
+  return (
+    <div className="shell">
+      <header className="topbar">
+        <div className="brand">SongGlow Admin</div>
+        <nav className="nav">
+          <Link href="/">返回曲库</Link>
+        </nav>
+        <div className="admin-actions-inline">
+          <Link className="button" href="/api/health" target="_blank">
+            健康检查
+          </Link>
+          <form action="/api/admin/logout" method="post">
+            <button className="button" type="submit">
+              退出后台
+            </button>
+          </form>
+        </div>
+      </header>
+      <AdminDashboard initialSongs={songs} />
+    </div>
+  );
+}
+
   }
 
   if (!isAdminAuthenticated()) {
