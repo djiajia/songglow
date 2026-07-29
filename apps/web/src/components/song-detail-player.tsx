@@ -87,11 +87,11 @@ export function SongDetailPlayer({ title, artist, audioUrl, focus, goal, lyrics 
 
                 return (
                   <div
-                    key=`${line.start}-${line.end}-${idx}`
+                    key={`${line.start}-${line.end}-${idx}`}
                     ref={(node) => {
                       lineRefs.current[idx] = node;
                     }}
-                    className=`song-lyric-card${isActive ? " is-active" : ""}${isPassed ? " is-passed" : ""}`
+                    className={`song-lyric-card${isActive ? " is-active" : ""}${isPassed ? " is-passed" : ""}`}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
                       <div style={{ fontWeight: 700, letterSpacing: "-0.01em" }}>{line.en}</div>
