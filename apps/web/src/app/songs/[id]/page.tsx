@@ -10,6 +10,8 @@ type SongPayload = {
   title: string;
   artist: string;
   audioUrl: string;
+  focus?: string;
+  goal?: string;
   lyrics?: Array<{ start: number; end: number; en: string; zh: string }>;
 };
 
@@ -43,6 +45,16 @@ export default async function SongDetailPage({ params }: { params: { id: string 
         <h1 style={{ fontSize: "clamp(30px, 4vw, 44px)" }}>
           {song.title} <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {song.artist}</span>
         </h1>
+        <p>
+          {song.focus || "未设置学习重点"}
+          {song.goal ? ` · ${song.goal}` : ""}
+        </p>
+        <div className="stack">
+          <audio controls src={song.audioUrl} style={{ width: "100%" }} />
+          <div style={{ color: "var(--muted)", fontSize: 13 }}>
+            如果音频无法播放，请确认链接有效，并检查浏览器是否允许播放该格式。
+          </div>
+        </div>
       </section>
 
       <div className="grid" style={{ gridTemplateColumns: "1fr", marginTop: 18 }}>
@@ -71,4 +83,4 @@ export default async function SongDetailPage({ params }: { params: { id: string 
       </div>
     </div>
   );
-                }
+}
