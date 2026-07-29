@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
 import { listSongs } from "@/lib/db";
-import { AdminSongEditor } from "@/components/admin-song-editor.tsx/admin-song-editor";
+import { AdminSongEditor } from "@/components/admin-song-editor-client";
 import { AdminUploadForm } from "@/components/admin-upload-form";
 
 export const dynamic = "force-dynamic";
@@ -20,7 +20,8 @@ export default async function AdminPage() {
         <section className="hero">
           <h1>还没有配置后台环境变量</h1>
           <p>请先在项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` 和 `SUPABASE_BUCKET`。</p>
-        </section>      </div>
+        </section>
+      </div>
     );
   }
 
@@ -45,4 +46,4 @@ export default async function AdminPage() {
       <AdminSongEditor songs={songs} />
     </div>
   );
-}
+}admin-song-editor-clientAadmin-song-editor-client
