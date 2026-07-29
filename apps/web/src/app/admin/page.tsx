@@ -2,31 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
 import { listSongs } from "@/lib/db";
-import { AdminSongEditor } from "@/components/admin-song-editor.tsx/admin-song-editor";
+import { AdminSongManager } from "@/components/admin-song-manager";
 import { AdminUploadForm } from "@/components/admin-upload-form";
-
-export const dynamic = "force-dynamic";
-
-export default async function AdminPage() {
-  if (!isAdminEnabled()) {
-    return (
-      <div className="shell">
-        <header className="topbar">
-          <div className="brand">SongGlow Admin</div>
-          <nav className="nav">
-            <Link href="/">返回曲库</Link>
-          </nav>
-        </header>
-        <section className="hero">
-          <h1>还没有配置后台环境变量</h1>
-          <p>请先在项目环境变量中配置 `ADMIN_PASSWORD`、`ADMIN_SESSION_TOKEN`、`SUPABASE_URL`、`SUPABASE_SERVICE_ROLE_KEY` 和 `SUPABASE_BUCKET`。</p>
-        </section>
-      </div>
-    );import Link from "next/link";
-import { redirect } from "next/navigation";
-import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
-import { listSongs } from "@/lib/db";
-import { AdminDashboard } from "@/components/admin-dashboard";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +30,12 @@ export default async function AdminPage() {
   }
 
   const songs = await listSongs().catch(() => []);
+  const total = songs.length;
+  const withLyrics = songs.filter((song) => song.lyrics?.length).length;
+  const withTags = songs.filter((song) => song.tags?.length).length;
+  const latest = [...songs]
+    .sort((a, b) => Number(b.updatedAt || 0) - Number(a.updatedAt || 0))
+    .slice(0, 1)[0];
 
   return (
     <div className="shell">
@@ -72,32 +55,38 @@ export default async function AdminPage() {
           </form>
         </div>
       </header>
-      <AdminDashboard initialSongs={songs} />
+      <div className="admin-dashboard">
+        <section className="admin-hero">
+          <div>
+            <div className="admin-eyebrow">SongGlow Admin</div>
+            <h1>曲库管理后台</h1>
+            <p>在一个页面里完成歌曲上传、搜索筛选、编辑信息、维护时间轴和删除歌曲。</p>
+          </div>
+          <div className="admin-stats-grid">
+            <div className="admin-stat-card">
+              <span>歌曲总数</span>
+              <strong>{total}</strong>
+            </div>
+            <div className="admin-stat-card">
+              <span>已配时间轴</span>
+              <strong>{withLyrics}</strong>
+            </div>
+            <div className="admin-stat-card">
+              <span>已加标签</span>
+              <strong>{withTags}</strong>
+            </div>
+            <div className="admin-stat-card">
+              <span>最近更新</span>
+              <strong>{latest ? `${latest.title} · ${latest.artist}` : "暂无歌曲"}</strong>
+            </div>
+          </div>
+        </section>
+
+        <div className="admin-main-grid">
+          <AdminUploadForm />
+          <AdminSongManager songs={songs} onSongsChange={() => {}} />
+        </div>
+      </div>
     </div>
   );
-}
-
-  }
-
-  if (!isAdminAuthenticated()) {
-    redirect("/admin/login");
-  }
-
-  const songs = await listSongs().catch(() => []);
-
-  return (
-    <div className="shell">
-      <header className="topbar">
-        <div className="brand">SongGlow Admin</div>
-        <nav className="nav">
-          <Link href="/">返回曲库</Link>
-        </nav>
-        <Link className="button" href="/api/health" target="_blank">
-          健康检查
-        </Link>
-      </header>
-      <AdminUploadForm />
-      <AdminSongEditor songs={songs} />
-    </div>
-  );
-}
+      }aimport Link from "next/link";
