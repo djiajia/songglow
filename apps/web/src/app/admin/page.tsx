@@ -46,4 +46,4 @@ export default async function AdminPage() {
       <AdminSongEditor songs={songs} />
     </div>
   );
-}admin-song-editor-clientAadmin-song-editor-client
+}
