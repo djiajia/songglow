@@ -6,236 +6,101 @@ export type StoredSong = Song & {
   coverStoragePath?: string;
 };
 
-function mapTags(value: unknown) {
-  if (!Array.isArray(value)) return [];
-  return value.map((item) => String(item)).filter(Boolean);
-}
-
-function mapLyrics(value: unknown): LyricLine[] {
-  if (typeof value === "string") {
-    try {
-      value = JSON.parse(value);
-    } catch {
-      // ignore
-    }
-  }
-
-  if (!Array.isArray(value)) return [];
-
-  return value
-    .map((row) => ({
-      start: Number((row as Record<string, unknown>)?.start ?? 0),
-      end: Number((row as Record<string, unknown>)?.end ?? 0),
-      en: String((row as Record<string, unknown>)?.en ?? ""),
-      zh: String((row as Record<string, unknown>)?.zh ?? "")
-    }))
-    .filter((row) => row.en || row.zh);
-}
-
-function rowToSong(row: Record<string, any>): StoredSong {
-  return {
-    id: row.id,
-    title: row.title,
-    artist: row.artist,
-    difficulty: row.difficulty || "未设置",
-    tags: mapTags(row.tags),
-    focus: row.focus || "",
-    goal: row.goal || "",
-    context: row.context || "",
-    audioUrl: row.audio_url,
-    coverUrl: row.cover_url || "",
-    lyrics: mapLyrics(row.lyrics),
-    createdAt: Number(row.created_at || 0),
-    updatedAt: Number(row.updated_at || 0),
-    audioStoragePath: row.audio_storage_path || "",
-    coverStoragePath: row.cover_storage_path || ""
-  };
-}
-
-function throwIfError(scope: string, error: { message: string } | null) {
-  if (error) {
-    throw new Error(`${scope}: ${error.message}`);
-  }
-}
-
-export async function listSongs() {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("songs")
-    .select("*")
-    .order("updated_at", { ascending: false });
-
-  throwIfError("Failed to list songs", error);
-  return (data || []).map(rowToSong);
-}
-
-export async function getSong(id: string) {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("songs")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
-
-  throwIfError("Failed to get song", error);
-  return data ? rowToSong(data) : null;
-}
-
-export async function insertSong(song: {
-  id: string;
-  title: string;
-  artist: string;
-  difficulty: string;
-  tags: string[];
-  focus: string;
-  goal: string;
-  context: string;
-  audioUrl: string;
-  coverUrl: string;
-  audioStoragePath: string;
-  coverStoragePath: string;
-  lyrics: LyricLine[];
-  createdAt: number;
-  updatedAt: number;
-}) {
-  const supabase = getSupabaseAdmin();
-  const payload = {
-    id: song.id,
-    title: song.title,
-    artist: song.artist,
-    difficulty: song.difficulty,
-    tags: song.tags,
-    focus: song.focus,
-    goal: song.goal,
-    context: song.context,
-    audio_url: song.audioUrl,
-    cover_url: song.coverUrl,
-    audio_storage_path: song.audioStoragePath,
-    cover_storage_path: song.coverStoragePath,
-    lyrics: song.lyrics,
-    created_at: song.createdAt,
-    updated_at: song.updatedAt
-  };
-
-  const { error } = await (supabase.from("songs") as any).insert(payload);
-
-  throwIfError("Failed to insert song", error);
-}
-
-export async function updateSongLyrics(id: string, lyrics: LyricLine[]) {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await (supabase.from("songs") as any)
-    .update({
-      lyrics,
-      updated_at: Date.now()
-    })
-    .eq("id", id)
-    .select("*")
-    .maybeSingle();
-
-  throwIfError("Failed to update song lyrics", error);
-  return data ? rowToSong(data) : null;
-}
-
-export async function removeSong(id: string) {
-  const song = await getSong(id);
-  if (!song) return null;
-
-  const supabase = getSupabaseAdmin();
-  const { error } = await supabase.from("songs").delete().eq("id", id);
-
-  throwIfError("Failed to remove song", error);
-  return song;
-    }import { getSupabaseAdmin } from "@/lib/supabase";
-import type { LyricLine, Song } from "@/types";
-
-export type StoredSong = Song & {
-  audioStoragePath?: string;
-  coverStoragePath?: string;
-};
-
-function throwIfError<T>(result: { data: T; error: Error | null }): T {
-  if (result.error) throw result.error;
-  return result.data;
-}
-
-export function mapTags(tags?: string): string[] {
-  if (!tags) return [];
-  if (Array.isArray(tags)) return tags;
+function mapLyrics(raw: string | null): LyricLine[] {
+  if (!raw) return [];
   try {
-    const parsed = JSON.parse(tags);
-    if (Array.isArray(parsed)) return parsed.map(String);
-  } catch {}
-  return [tags];
-}
-
-export function mapLyrics(value: any): LyricLine[] {
-  if (!value) return [];
-  if (Array.isArray(value)) {
-    return value.map((item) => ({
-      time: item.time ?? null,
-      text: item.text ?? "",
-    }));
-  }
-  if (typeof value === "string") {
-    try {
-      const parsed = JSON.parse(value);
-      if (Array.isArray(parsed)) {
-        return parsed.map((item) => ({
-          time: item.time ?? null,
-          text: item.text ?? "",
-        }));
-      }
-    } catch {}
+    return typeof raw === "string" ? JSON.parse(raw) : raw;
+  } catch {
     return [];
   }
-  return [];
+}
+
+export async function getSongById(id: string): Promise<StoredSong | null> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from("songs")
+    .select("*")
+    .eq("id", id)
+    .single();
+  if (error) return null;
+  const song = {
+    ...data,
+    lyrics: mapLyrics(data.lyrics),
+  } as StoredSong;
+  return song;
 }
 
 export async function listSongs(): Promise<StoredSong[]> {
-  const { data, error } = await getSupabaseAdmin()
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
     .from("songs")
     .select("*")
     .order("created_at", { ascending: false });
-  if (error) throw error;
-  return data || [];
+  if (error) return [];
+  return data.map((s) => ({
+    ...s,
+    lyrics: mapLyrics(s.lyrics),
+  })) as StoredSong[];
 }
 
-export async function getSong(id: string): Promise<StoredSong | null> {
-  const { data, error } = await getSupabaseAdmin()
+export async function createSong(input: {
+  title: string;
+  artist?: string;
+  lyrics?: string;
+  audioStoragePath?: string;
+  coverStoragePath?: string;
+}): Promise<StoredSong | null> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
     .from("songs")
-    .select("*")
-    .eq("id", id)
-    .single();
-  if (error && error.code !== "PGRST116") throw error;
-  return data ?? null;
-}
-
-export async function insertSong(song: Omit<StoredSong, "id" | "created_at">): Promise<StoredSong> {
-  const { data, error } = await getSupabaseAdmin()
-    .from("songs")
-    .insert(song)
+    .insert({
+      title: input.title,
+      artist: input.artist ?? null,
+      lyrics: input.lyrics ?? null,
+      audioStoragePath: input.audioStoragePath ?? null,
+      coverStoragePath: input.coverStoragePath ?? null,
+    })
     .select()
     .single();
-  if (error) throw error;
-  return data;
+  if (error) return null;
+  return {
+    ...data,
+    lyrics: mapLyrics(data.lyrics),
+  } as StoredSong;
 }
 
-export async function updateSongLyrics(id: string, lyrics: LyricLine[]): Promise<StoredSong> {
-  const { data, error } = await getSupabaseAdmin()
+export async function updateSong(id: string, input: {
+  title?: string;
+  artist?: string;
+  lyrics?: string;
+  audioStoragePath?: string;
+  coverStoragePath?: string;
+}): Promise<StoredSong | null> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
     .from("songs")
-    .update({ lyrics })
+    .update({
+      title: input.title,
+      artist: input.artist,
+      lyrics: input.lyrics,
+      audioStoragePath: input.audioStoragePath,
+      coverStoragePath: input.coverStoragePath,
+    })
     .eq("id", id)
     .select()
     .single();
-  if (error) throw error;
-  return data;
+  if (error) return null;
+  return {
+    ...data,
+    lyrics: mapLyrics(data.lyrics),
+  } as StoredSong;
 }
 
-export async function removeSong(id: string): Promise<void> {
-  const { error } = await getSupabaseAdmin()
+export async function deleteSong(id: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase
     .from("songs")
     .delete()
     .eq("id", id);
-  if (error) throw error;
+  return !error;
 }
