@@ -116,15 +116,10 @@ export async function insertSong(song: {
 
 export async function updateSongLyrics(id: string, lyrics: LyricLine[]) {
   const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase
-    .from("songs")
-    .update({
-      lyrics,
-      updated_at: Date.now()
-    })
-    .eq("id", id)
-    .select("*")
-    .maybeSingle();
+  const { data, error } = await (supabase.from("songs") as any).update({
+    lyrics,
+    updated_at: Date.now()
+  }).eq("id", id).select("*").maybeSingle();
 
   throwIfError("Failed to update song lyrics", error);
   return data ? rowToSong(data) : null;
@@ -139,4 +134,4 @@ export async function removeSong(id: string) {
 
   throwIfError("Failed to remove song", error);
   return song;
-  }
+}
