@@ -20,7 +20,15 @@ function parseLyrics(input: unknown): LyricLine[] {
           en: String(row?.en ?? ""),
           zh: String(row?.zh ?? "")
         }))
-        .filter((row) => row.en || row.zh);
+        .filter(
+          (row) =>
+            (row.en || row.zh) &&
+            Number.isFinite(row.start) &&
+            Number.isFinite(row.end) &&
+            row.end > row.start &&
+            !(row.en.trim() === "英文歌词" && row.zh.trim() === "中文翻译")
+        )
+        .sort((a, b) => a.start - b.start);
     }
   } catch {
     // ignore
@@ -39,7 +47,15 @@ function parseLyrics(input: unknown): LyricLine[] {
         zh: (zh || "").trim()
       };
     })
-    .filter((row) => row.en || row.zh);
+    .filter(
+      (row) =>
+        (row.en || row.zh) &&
+        Number.isFinite(row.start) &&
+        Number.isFinite(row.end) &&
+        row.end > row.start &&
+        !(row.en.trim() === "英文歌词" && row.zh.trim() === "中文翻译")
+    )
+    .sort((a, b) => a.start - b.start);
 }
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
