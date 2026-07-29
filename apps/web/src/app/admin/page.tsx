@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
 import { listSongs } from "@/lib/db";
-import { AdminSongEditor } from "@/components/admin-song-editor-client";
+import { AdminSongEditor } from "@/components/admin-song-editor.tsx/admin-song-editor";
 import { AdminUploadForm } from "@/components/admin-upload-form";
 
 export const dynamic = "force-dynamic";
