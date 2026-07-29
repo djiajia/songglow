@@ -145,6 +145,40 @@ export async function updateSongLyrics(id: string, lyrics: LyricLine[]) {
   return data ? rowToSong(data) : null;
 }
 
+export async function updateSong(
+  id: string,
+  patch: {
+    title: string;
+    artist: string;
+    difficulty: string;
+    tags: string[];
+    focus: string;
+    goal: string;
+    context: string;
+    lyrics: LyricLine[];
+  }
+) {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await (supabase.from("songs") as any)
+    .update({
+      title: patch.title,
+      artist: patch.artist,
+      difficulty: patch.difficulty,
+      tags: patch.tags,
+      focus: patch.focus,
+      goal: patch.goal,
+      context: patch.context,
+      lyrics: patch.lyrics,
+      updated_at: Date.now()
+    })
+    .eq("id", id)
+    .select("*")
+    .maybeSingle();
+
+  throwIfError("Failed to update song", error);
+  return data ? rowToSong(data) : null;
+}
+
 export async function removeSong(id: string) {
   const song = await getSong(id);
   if (!song) return null;
