@@ -27,7 +27,15 @@ function parseLyrics(input: FormDataEntryValue | null) {
           en: String(row.en ?? ""),
           zh: String(row.zh ?? "")
         }))
-        .filter((row) => row.en || row.zh);
+        .filter(
+          (row) =>
+            (row.en || row.zh) &&
+            Number.isFinite(row.start) &&
+            Number.isFinite(row.end) &&
+            row.end > row.start &&
+            !(row.en.trim() === "英文歌词" && row.zh.trim() === "中文翻译")
+        )
+        .sort((a, b) => a.start - b.start);
     }
   } catch {
     // ignore
@@ -46,7 +54,15 @@ function parseLyrics(input: FormDataEntryValue | null) {
         zh: (zh || "").trim()
       };
     })
-    .filter((row) => row.en || row.zh);
+    .filter(
+      (row) =>
+        (row.en || row.zh) &&
+        Number.isFinite(row.start) &&
+        Number.isFinite(row.end) &&
+        row.end > row.start &&
+        !(row.en.trim() === "英文歌词" && row.zh.trim() === "中文翻译")
+    )
+    .sort((a, b) => a.start - b.start);
 }
 
 function sanitizeFileName(fileName: string) {
