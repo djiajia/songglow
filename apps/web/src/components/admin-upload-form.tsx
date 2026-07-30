@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Song } from "@/types";
 
@@ -9,7 +11,14 @@ type Status =
   | { type: "success"; message: string }
   | { type: "error"; message: string };
 
-export function AdminUploadForm({ onCreated }: { onCreated?: (song: Song) => void }) {
+export function AdminUploadForm({
+  onCreated,
+  redirectOnSuccess = false
+}: {
+  onCreated?: (song: Song) => void;
+  redirectOnSuccess?: boolean;
+}) {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>({
     type: "idle",
     message: "上传音频后，前台首页会自动显示并支持播放。"
@@ -43,9 +52,13 @@ export function AdminUploadForm({ onCreated }: { onCreated?: (song: Song) => voi
       onCreated?.(data);
       setStatus({
         type: "success",
-        message: `上传成功：${data.title}（返回首页即可看到）`
+        message: redirectOnSuccess ? `上传成功：${data.title}，正在跳转编辑页…` : `上传成功：${data.title}（返回列表即可看到）`
       });
       form.reset();
+      if (redirectOnSuccess && data?.id) {
+        router.push(`/admin/${data.id}`);
+        router.refresh();
+      }
     } catch (error) {
       setStatus({
         type: "error",
@@ -61,6 +74,11 @@ export function AdminUploadForm({ onCreated }: { onCreated?: (song: Song) => voi
           <div className="admin-eyebrow">新增歌曲</div>
           <h2>上传到曲库</h2>
           <p>上传音频、补充歌曲信息，并可在导入时直接写入歌词时间轴。</p>
+        </div>
+        <div className="admin-actions-inline">
+          <Link className="button" href="/admin">
+            返回列表
+          </Link>
         </div>
       </div>
 
