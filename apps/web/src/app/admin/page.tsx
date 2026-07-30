@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { isAdminAuthenticated, isAdminEnabled } from "@/lib/auth";
 import { listSongs } from "@/lib/db";
 import { AdminSongManager } from "@/components/admin-song-manager";
-import { AdminUploadForm } from "@/components/admin-upload-form";
 
 export const dynamic = "force-dynamic";
 
@@ -43,10 +42,14 @@ export default async function AdminPage() {
         <div className="brand">SongGlow Admin</div>
         <nav className="nav">
           <Link href="/">返回曲库</Link>
+          <Link href="/admin/new">新增歌曲</Link>
         </nav>
         <div className="admin-actions-inline">
           <Link className="button" href="/api/health" target="_blank">
             健康检查
+          </Link>
+          <Link className="button primary" href="/admin/new">
+            新增歌曲
           </Link>
           <form action="/api/admin/logout" method="post">
             <button className="button" type="submit">
@@ -60,7 +63,12 @@ export default async function AdminPage() {
           <div>
             <div className="admin-eyebrow">SongGlow Admin</div>
             <h1>曲库管理后台</h1>
-            <p>在一个页面里完成歌曲上传、搜索筛选、编辑信息、维护时间轴和删除歌曲。</p>
+            <p>先在列表中浏览曲库，再进入独立的新增页或编辑页处理歌曲资料和时间轴。</p>
+            <div className="admin-hero-actions">
+              <Link className="button primary" href="/admin/new">
+                去新增歌曲
+              </Link>
+            </div>
           </div>
           <div className="admin-stats-grid">
             <div className="admin-stat-card">
@@ -81,11 +89,7 @@ export default async function AdminPage() {
             </div>
           </div>
         </section>
-
-        <div className="admin-main-grid">
-          <AdminUploadForm />
-          <AdminSongManager songs={songs} />
-        </div>
+        <AdminSongManager songs={songs} />
       </div>
     </div>
   );
