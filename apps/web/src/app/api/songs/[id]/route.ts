@@ -118,4 +118,4 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
   await deleteFileIfExists(song.coverStoragePath || song.coverUrl);
 
   return NextResponse.json({ ok: true });
-              }
+}
