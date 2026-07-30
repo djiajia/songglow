@@ -84,7 +84,7 @@ export default async function AdminPage() {
 
         <div className="admin-main-grid">
           <AdminUploadForm />
-          <AdminSongManager songs={songs} onSongsChange={() => {}} />
+          <AdminSongManager songs={songs} />
         </div>
       </div>
     </div>
