@@ -1,4 +1,4 @@
-"use client";
+🔁 同步本地主分支文件"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import type { Song } from "@/types";
