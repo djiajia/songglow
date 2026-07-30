@@ -58,54 +58,54 @@ export function AdminUploadForm({ onCreated }: { onCreated?: (song: Song) => voi
     <section className="admin-panel admin-panel-soft">
       <div className="admin-section-head">
         <div>
-          <div className="admin-eyebrow">新增歌曲</div>div>
-          <h2>上传到曲库</h2>h2>
-          <p>上传音频、补充歌曲信息，并可在导入时直接写入歌词时间轴。</p>p>
-        </div>div>
-      </div>div>
+          <div className="admin-eyebrow">新增歌曲</div>
+          <h2>上传到曲库</h2>
+          <p>上传音频、补充歌曲信息，并可在导入时直接写入歌词时间轴。</p>
+        </div>
+      </div>
 
       <form className="form" onSubmit={onSubmit}>
         <label>
           歌曲名称
           <input name="title" placeholder="例如：Imagine" required />
-        </label>label>
+        </label>
         <label>
           歌手
           <input name="artist" placeholder="例如：John Lennon" required />
-        </label>label>
+        </label>
         <label>
           难度
           <select name="difficulty" defaultValue="中级">
-            <option value="入门">入门</option>option>
-            <option value="初中级">初中级</option>option>
-            <option value="中级">中级</option>option>
-            <option value="进阶">进阶</option>option>
-          </select>select>
-        </label>label>
+            <option value="入门">入门</option>
+            <option value="初中级">初中级</option>
+            <option value="中级">中级</option>
+            <option value="进阶">进阶</option>
+          </select>
+        </label>
         <label>
           标签（逗号分隔）
           <input name="tags" placeholder="抒情,入门,短句" />
-        </label>label>
+        </label>
         <label>
           适合练什么
           <input name="focus" placeholder="连读、情绪表达、弱读听辨" />
-        </label>label>
+        </label>
         <label>
           学习收益
           <input name="goal" placeholder="学完后理解副歌核心表达" />
-        </label>label>
+        </label>
         <label>
           歌曲简介/学习背景
           <textarea name="context" rows={3} placeholder="描述这首歌为什么适合学习、适合什么用户。" />
-        </label>label>
+        </label>
         <label>
           音频文件（必填）
           <input name="audio" type="file" accept="audio/*" required />
-        </label>label>
+        </label>
         <label>
           封面（可选）
           <input name="cover" type="file" accept="image/*" />
-        </label>label>
+        </label>
         <label>
           歌词时间轴（可选）
           <textarea
@@ -113,61 +113,15 @@ export function AdminUploadForm({ onCreated }: { onCreated?: (song: Song) => voi
             rows={8}
             placeholder={`每行：开始秒数|结束秒数|英文歌词|中文翻译\n例如：0.5|4.2|Imagine there's no heaven|想象没有天堂`}
           />
-        </label>label>
+        </label>
 
         <button className="button primary" type="submit" disabled={status.type === "loading"}>
           {status.type === "loading" ? "上传中…" : "保存到曲库"}
-        </button>button>
+        </button>
         <div style={{ color: status.type === "error" ? "#b42318" : "var(--muted)", fontSize: 13 }}>
           {status.message}
-        </div>div>
-      </form>form>
-    </section>section>
+        </div>
+      </form>
+    </section>
   );
-}</section>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
